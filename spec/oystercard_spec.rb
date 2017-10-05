@@ -73,10 +73,6 @@ describe Oystercard do
       it '#deducts mimumum_balance' do
         expect { oystercard.tap_out(station) }.to change { oystercard.balance }.by(- Oystercard::MINIMUM_BALANCE)
       end
-
-      it '#records exit station' do
-        expect(oystercard.tap_out(station)).to eq oystercard.journey_history[-1][:exit_station]
-      end
     end
 
     describe '#journey history' do
