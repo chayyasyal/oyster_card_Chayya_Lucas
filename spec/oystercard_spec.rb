@@ -78,7 +78,17 @@ describe Oystercard do
   end
   end
 
+  describe "#journey_history" do
+
   it '#has no journey history by default' do
   expect(oystercard.journey_history).to eq []
   end
+
+  it "#will show journey_history" do
+    subject.top_up(Oystercard::MINIMUM_BALANCE)
+    subject.tap_in(station)
+    subject.tap_out(station)
+    expect(oystercard.journey_history).to include(entry_station: station, exit_station: station)
+  end
+end
 end
