@@ -1,9 +1,8 @@
 require 'oystercard'
 describe Oystercard do
   subject(:oystercard) { described_class.new }
-  let(:entry_station) { double(:station) }
-  let(:exit_station) { double(:station) }
-
+  let(:entry_station) { double(:entry_station, name: :Victoria, zone: 1) }
+  let(:exit_station) { double(:exit_station, name: :Golders_green, zone: 3) }
 
   describe '#top_up' do
     it '#top_up should change the balance on the Oystercard' do
@@ -78,17 +77,26 @@ describe Oystercard do
     end
 
     describe '#journey history' do
-      let(:journey){{ entry_station: entry_station, exit_station: exit_station}}
+      let(:journey) { { entry_station: entry_station, exit_station: exit_station } }
 
       it '#has no journey history by default' do
         expect(oystercard.journey_history).to be_empty
       end
 
-      it '#will show journey history' do
-        subject.top_up Oystercard::MINIMUM_BALANCE
-        subject.tap_in(entry_station)
-        subject.tap_out(exit_station)
-        expect(oystercard.journey_history).to include journey
+      context 'completed 1 journey' do
+        before do
+          subject.top_up Oystercard::MINIMUM_BALANCE
+          subject.tap_in(entry_station)
+          subject.tap_out(exit_station)
+        end
+
+        it '#will show journey history' do
+          expect(oystercard.journey_history).to include journey
+        end
+
+        # it 'contains station name' do
+        #   expect(oystercard.journey_history[entry_station]
+        # end
       end
     end
   end
